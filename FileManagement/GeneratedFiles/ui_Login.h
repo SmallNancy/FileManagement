@@ -42,7 +42,7 @@ public:
         label_2->setGeometry(QRect(70, 130, 54, 21));
         pushButton = new QPushButton(Login);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(90, 170, 75, 23));
+        pushButton->setGeometry(QRect(130, 170, 75, 23));
         nameLine = new QLineEdit(Login);
         nameLine->setObjectName(QStringLiteral("nameLine"));
         nameLine->setGeometry(QRect(110, 100, 171, 20));
@@ -54,10 +54,10 @@ public:
         label->setGeometry(QRect(70, 100, 54, 21));
         pushButton_2 = new QPushButton(Login);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(290, 100, 75, 23));
+        pushButton_2->setGeometry(QRect(30, 170, 75, 23));
         pushButton_3 = new QPushButton(Login);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(200, 170, 75, 23));
+        pushButton_3->setGeometry(QRect(240, 170, 75, 23));
 
         retranslateUi(Login);
         QObject::connect(pushButton, SIGNAL(clicked()), Login, SLOT(Click_Login()));

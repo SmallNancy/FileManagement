@@ -10,6 +10,7 @@ public:
 	bool deleteUser(int userId);
 	bool updateUser(User user);
 	bool findUserById(int userId);
+
 	bool findUserByName(char* name);
 	void getUser();
 
