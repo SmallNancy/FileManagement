@@ -1,43 +1,65 @@
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QDebug>
 #include "Database.h"  
-MySql::MySql()
+
+MySql::MySql(QObject *parent)
+	:QObject(parent)
 {
+	dbDriver = "QMYSQL";
+	dbName = "filemanagement";
+	userName = "root";
+	userPwd = "Tanwenbo520";
+	hostName = "rm-wz93ilr9576g645y7yo.mysql.rds.aliyuncs.com";
+	hostPort = 5432;
+	connDB();
 }
 
-
-void MySql::createtable()
+bool MySql::connDB()
 {
-	query = new QSqlQuery;
+		QSqlDatabase db;
+		if (QSqlDatabase::contains("qt_sql_default_connection"))
+			db = QSqlDatabase::database("qt_sql_default_connection");
+		else
+			db = QSqlDatabase::addDatabase(dbDriver);
+		db.setHostName(hostName);//设置主机名
+		db.setDatabaseName(dbName);//设置数据库名
+		db.setUserName(userName);//设置用户名
+		db.setPassword(userPwd);//设置用户密码
 
-	query->exec("create table user(name VARCHAR(30) PRIMARY KEY UNIQUE NOT NULL,passward VARCHAR(30))");
-
-	/*创建root用户*/
-	query->exec("insert into user value('root', 'root')");
+		if (db.open())
+		{
+			qDebug() << "Database connected successfully!";
+			return true;
+		}
+		else
+		{
+			qDebug() << "Database connected failed!";
+			return false;
+		}
 }
 
-
-bool MySql::loguser(QString name, QString passward)
+bool MySql::queryDB(const QString &Sql)
 {
-	QString str = QString("select * from user where name='%1' and passward='%2'").arg(name).arg(passward);
-	query = new QSqlQuery;
-	query->exec(str);
-	query->last();
-	int record = query->at() + 1;
-	if (record == 0)
-		return false;
-	return true;
+	QSqlQuery query;
+	query.exec(Sql);
+	if (query.next())
+		//如果有记录则为真 否则退出判断
+	{
+		qDebug() << query.value(0).toString();
+		return true;
+	}
+	return false;
 }
 
-
-bool MySql::signup(QString name, QString passward)
+bool MySql::insertDB(const QString &Sql)
 {
-	QString str = QString("select * from user where name='%1").arg(name);
-	query = new QSqlQuery;
-	query->exec(str);
-	query->last();
-	int record = query->at() + 1;
-	if (record != 0)
-		return false;
-	str = QString("insert into user value('%1','%2')").arg(name).arg(passward);
-	bool ret = query->exec(str);
-	return ret;
+	QSqlQuery insert;
+	insert.exec(Sql);
+	if (insert.isActive())
+	{
+		qDebug() << Sql;
+		return true;
+	}
+	return false;
 }
